@@ -38,8 +38,18 @@ BEGIN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Số lượng thuốc cập nhật lớn hơn số lượng sẵn có!';
 			END IF;
 		ELSE
-			
-		END IF;
+			IF (SELECT (Quantity - newQuantity) FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
+				UPDATE MEDICINE
+                SET Quantity = Quantity - newQuantity
+				WHERE MEDICINE.MedID = NEW.MedID;
+				
+                UPDATE MEDICINE
+                SET Quantity = Quantity + oldQuantity
+                WHERE MEDICINE.MedID = OLD.MedID;
+			ELSE
+				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Số lượng thuốc cập nhật lớn hơn số lượng sẵn có!';
+			END IF;
+        END IF;
 	ELSE
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Mã thuốc không tồn tại!';
 	END IF;
