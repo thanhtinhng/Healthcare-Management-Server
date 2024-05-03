@@ -1,16 +1,16 @@
 CREATE DATABASE QLKB
 
 USE QLKB 
-
+DROP TABLE Patient
 CREATE TABLE Patient (
-    PatientID INT IDENTITY(1,1) PRIMARY KEY,
-    CitizenID VARCHAR(20) NOT NULL,
+    PatientID INT AUTO_INCREMENT PRIMARY KEY,
+    CitizenID VARCHAR(20) NOT NULL UNIQUE,
     PatientName VARCHAR(255) NOT NULL,
-    Gender INT NOT NULL,
+    Gender INT NOT NULL CHECK (Gender IN(0, 1)), /*0:Nam, 1: Nu*/
     PatientBirthdate DATE NOT NULL,
-    PatientPhone VARCHAR(20) NOT NULL, 
-    PatientEmail VARCHAR(255) NOT NULL,
-    PatientAddr VARCHAR(255),
+    PatientPhone VARCHAR(20) NOT NULL CHECK(PatientPhone LIKE('0%')), 
+    PatientEmail VARCHAR(255) NOT NULL UNIQUE,
+    PatientAddr VARCHAR(255) NOT NULL,
     EmergencyContact VARCHAR(255),
 	AccPassword VARCHAR(255) NOT NULL
 )
@@ -19,12 +19,12 @@ CREATE TABLE InsuranceDetail (
     InsuranceID INT PRIMARY KEY,
     DiscountPercent DECIMAL(5,2) NOT NULL,
     EndDate DATE NOT NULL,
-    PatientID INT,
+    PatientID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID)
 )
 
 CREATE TABLE Receptionist (
-    ReceptionistID INT IDENTITY(1,1) PRIMARY KEY,
+    ReceptionistID INT AUTO_INCREMENT PRIMARY KEY,
     ReceptionistName VARCHAR(255) NOT NULL,
     Gender INT NOT NULL,
     ReceptionistBirthdate DATE NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE Receptionist (
 )
 
 CREATE TABLE Doctor (
-    DoctorID INT IDENTITY(1,1) PRIMARY KEY,
+    DoctorID INT AUTO_INCREMENT PRIMARY KEY,
     DoctorName VARCHAR(255) NOT NULL,
     Gender INT NOT NULL,
     DoctorBirthdate DATE NOT NULL,
@@ -48,7 +48,7 @@ CREATE TABLE Doctor (
 )
 
 CREATE TABLE Appointment (
-    AppointmentID INT IDENTITY(1,1) PRIMARY KEY,
+    AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
     ConsultationTime SMALLDATETIME NOT NULL,
     Room VARCHAR(8) NOT NULL,
     Symptom VARCHAR(255) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE Appointment (
 )
 
 CREATE TABLE Consultation (
-    ConsultationID INT IDENTITY(1,1) PRIMARY KEY,
+    ConsultationID INT AUTO_INCREMENT PRIMARY KEY,
     Conclusion VARCHAR(255),
     StartTime SMALLDATETIME NOT NULL,
     EndTime SMALLDATETIME,
@@ -72,7 +72,7 @@ CREATE TABLE Consultation (
 )
 
 CREATE TABLE LaboratoryPhysician (
-    LabPhysID INT IDENTITY(1,1) PRIMARY KEY,
+    LabPhysID INT AUTO_INCREMENT PRIMARY KEY,
     LabPhysName VARCHAR(255) NOT NULL,
     Gender INT NOT NULL,
     LabPhysBirthdate DATE NOT NULL,
@@ -84,30 +84,30 @@ CREATE TABLE LaboratoryPhysician (
 )
 
 CREATE TABLE MedicalTest (
-    TestID INT IDENTITY(1,1) PRIMARY KEY,
+    TestID INT AUTO_INCREMENT PRIMARY KEY,
     TestName VARCHAR(255) NOT NULL,
     Result VARCHAR(255) NOT NULL,
     TestTime DATETIME NOT NULL,
     TestFee MONEY NOT NULL,
-    ConsultationID INT,
-    LabPhysID INT,
+    ConsultationID INT NOT NULL,
+    LabPhysID INT NOT NULL,
     FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
     FOREIGN KEY (LabPhysID) REFERENCES LaboratoryPhysician (LabPhysID)
 )
 
 CREATE TABLE MedicineManufaturer (
-	ManufID INT IDENTITY(1,1) PRIMARY KEY,
+	ManufID INT AUTO_INCREMENT PRIMARY KEY,
 	ManufName VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE Medicine (
-    MedID INT IDENTITY(1,1) PRIMARY KEY,
+    MedID INT AUTO_INCREMENT PRIMARY KEY,
     MedName VARCHAR(255) NOT NULL,
     MedDesc VARCHAR(255),
     Unit VARCHAR(50) NOT NULL,
     Price MONEY NOT NULL,
     Quantity INT NOT NULL,
-	ManufID INT,
+	ManufID INT NOT NULL,
 	FOREIGN KEY (ManufID) REFERENCES MedicineManufaturer (ManufID)
 )
 
@@ -121,7 +121,7 @@ CREATE TABLE Consultation_Medicine (
 )
 
 CREATE TABLE Diagnosis (
-    DiagnosisID INT IDENTITY(1,1) PRIMARY KEY,
+    DiagnosisID INT AUTO_INCREMENT PRIMARY KEY,
     DiagnosisName VARCHAR(255) NOT NULL,
     DiagnosisDesc VARCHAR(255),
     Severity VARCHAR(50)
@@ -136,7 +136,7 @@ CREATE TABLE Consultation_Diagnosis (
 )
 
 CREATE TABLE Bill (
-    BillID INT IDENTITY(1,1) PRIMARY KEY,
+    BillID INT AUTO_INCREMENT PRIMARY KEY,
 	BillType INT NOT NULL,
     BillDate DATE NOT NULL,
     PreTotal MONEY NOT NULL,
