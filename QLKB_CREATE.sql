@@ -26,30 +26,34 @@ CREATE TABLE InsuranceDetail (
 CREATE TABLE Receptionist (
     ReceptionistID INT AUTO_INCREMENT PRIMARY KEY,
     ReceptionistName VARCHAR(255) NOT NULL,
-    Gender INT NOT NULL,
+    Gender INT NOT NULL CHECK (Gender IN(0, 1)),
     ReceptionistBirthdate DATE NOT NULL,
     DateJoined DATE NOT NULL,
-    ReceptionistPhone VARCHAR(20) NOT NULL,
-    ReceptionistEmail VARCHAR(255) NOT NULL,
+    ReceptionistPhone VARCHAR(20) NOT NULL CHECK(ReceptionistPhone LIKE('0%')),
+    ReceptionistEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
 )
+
+ALTER TABLE Receptionist ADD CONSTRAINT CHECK_RECEPT_JOINED CHECK(ReceptionistBirthdate < DateJoined)
 
 CREATE TABLE Doctor (
     DoctorID INT AUTO_INCREMENT PRIMARY KEY,
     DoctorName VARCHAR(255) NOT NULL,
-    Gender INT NOT NULL,
+    Gender INT NOT NULL CHECK (Gender IN(0, 1)),
     DoctorBirthdate DATE NOT NULL,
     DateJoined DATE NOT NULL,
     Specialization VARCHAR(255) NOT NULL,
     Department VARCHAR(255) NOT NULL,
-    DoctorPhone VARCHAR(20) NOT NULL,
-    DoctorEmail VARCHAR(255) NOT NULL,
+    DoctorPhone VARCHAR(20) NOT NULL CHECK(DoctorPhone LIKE('0%')),
+    DoctorEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
 )
 
+ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJoined)
+
 CREATE TABLE Appointment (
     AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
-    ConsultationTime SMALLDATETIME NOT NULL,
+    ConsultationTime DATETIME NOT NULL,
     Room VARCHAR(8) NOT NULL,
     Symptom VARCHAR(255) NOT NULL,
 	PatientID INT NOT NULL,
@@ -63,32 +67,36 @@ CREATE TABLE Appointment (
 CREATE TABLE Consultation (
     ConsultationID INT AUTO_INCREMENT PRIMARY KEY,
     Conclusion VARCHAR(255),
-    StartTime SMALLDATETIME NOT NULL,
-    EndTime SMALLDATETIME,
+    StartTime DATETIME NOT NULL,
+    EndTime DATETIME,
     PatientID INT NOT NULL,
     DoctorID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID),
     FOREIGN KEY (DoctorID) REFERENCES Doctor (DoctorID)
 )
 
+ALTER TABLE Consultation ADD CONSTRAINT CHECK_CONSULT_ENDTIME CHECK(EndTime > StartTime)
+
 CREATE TABLE LaboratoryPhysician (
     LabPhysID INT AUTO_INCREMENT PRIMARY KEY,
     LabPhysName VARCHAR(255) NOT NULL,
-    Gender INT NOT NULL,
+    Gender INT NOT NULL CHECK (Gender IN(0, 1)),
     LabPhysBirthdate DATE NOT NULL,
     DateJoined DATE NOT NULL,
     Specialization VARCHAR(255) NOT NULL,
     LabPhysPhone VARCHAR(20) NOT NULL,
-    LabPhysEmail VARCHAR(255) NOT NULL,
+    LabPhysEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
 )
+
+ALTER TABLE LaboratoryPhysician ADD CONSTRAINT CHECK_LP_JOINED CHECK(LabPhysBirthdate < DateJoined)
 
 CREATE TABLE MedicalTest (
     TestID INT AUTO_INCREMENT PRIMARY KEY,
     TestName VARCHAR(255) NOT NULL,
     Result VARCHAR(255) NOT NULL,
     TestTime DATETIME NOT NULL,
-    TestFee MONEY NOT NULL,
+    TestFee FLOAT NOT NULL,
     ConsultationID INT NOT NULL,
     LabPhysID INT NOT NULL,
     FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
@@ -103,9 +111,9 @@ CREATE TABLE MedicineManufaturer (
 CREATE TABLE Medicine (
     MedID INT AUTO_INCREMENT PRIMARY KEY,
     MedName VARCHAR(255) NOT NULL,
-    MedDesc VARCHAR(255),
+    MedDesc VARCHAR(255) NOT NULL,
     Unit VARCHAR(50) NOT NULL,
-    Price MONEY NOT NULL,
+    Price FLOAT NOT NULL,
     Quantity INT NOT NULL,
 	ManufID INT NOT NULL,
 	FOREIGN KEY (ManufID) REFERENCES MedicineManufaturer (ManufID)
@@ -123,8 +131,8 @@ CREATE TABLE Consultation_Medicine (
 CREATE TABLE Diagnosis (
     DiagnosisID INT AUTO_INCREMENT PRIMARY KEY,
     DiagnosisName VARCHAR(255) NOT NULL,
-    DiagnosisDesc VARCHAR(255),
-    Severity VARCHAR(50)
+    DiagnosisDesc VARCHAR(255) NOT NULL,
+    Severity VARCHAR(50) NOT NULL
 )
 
 CREATE TABLE Consultation_Diagnosis (
@@ -139,8 +147,8 @@ CREATE TABLE Bill (
     BillID INT AUTO_INCREMENT PRIMARY KEY,
 	BillType INT NOT NULL,
     BillDate DATE NOT NULL,
-    PreTotal MONEY NOT NULL,
-    Total MONEY NOT NULL,
+    PreTotal FLOAT NOT NULL,
+    Total FLOAT NOT NULL,
 	ConsultationID INT NOT NULL,
 	InsuranceID INT,
 	FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
