@@ -54,7 +54,6 @@ ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJo
 CREATE TABLE Appointment (
     AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
     ConsultationTime DATETIME NOT NULL,
-    Room VARCHAR(8) NOT NULL,
     Symptom VARCHAR(255) NOT NULL,
 	PatientID INT NOT NULL,
     ReceptionistID INT NOT NULL,
