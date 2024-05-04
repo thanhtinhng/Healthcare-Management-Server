@@ -138,7 +138,7 @@ FOR EACH ROW
 BEGIN
     DECLARE done BOOL DEFAULT false;
     DECLARE loopDoctorID INT;
-    DECLARE loopConsultationTime INT;
+    DECLARE loopConsultationTime DATETIME;
 	DECLARE cur CURSOR FOR SELECT DoctorID, ConsultationTime FROM Appointment WHERE DoctorID = NEW.DoctorID ;
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
     
@@ -155,4 +155,30 @@ BEGIN
 END
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER Appointment_Check_Available_UPDATE
+BEFORE UPDATE ON Appointment
+FOR EACH ROW
+BEGIN
+    DECLARE done BOOL DEFAULT false;
+    DECLARE loopDoctorID INT;
+    DECLARE loopConsultationTime DATETIME;
+	DECLARE cur CURSOR FOR SELECT DoctorID, ConsultationTime FROM Appointment WHERE DoctorID = NEW.DoctorID ;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
+    
+    OPEN CUR;
+    check_available: LOOP
+		FETCH cur INTO loopDoctorID, loopConsultationTime;
+        IF done = true THEN LEAVE check_available; 
+        END IF;
+        IF (loopDoctorID = NEW.DoctorID AND loopConsultationTime = NEW.ConsultationTime) THEN
+			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
+		END IF;
+	END LOOP;
+        CLOSE cur;
+END
+//
+DELIMITER ;
+
 
