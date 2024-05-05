@@ -1,7 +1,5 @@
-CREATE DATABASE QLKB
+CREATE DATABASE QLKB;
 
-USE QLKB 
-DROP TABLE Patient
 CREATE TABLE Patient (
     PatientID INT AUTO_INCREMENT PRIMARY KEY,
     CitizenID VARCHAR(20) NOT NULL UNIQUE,
@@ -13,7 +11,7 @@ CREATE TABLE Patient (
     PatientAddr VARCHAR(255) NOT NULL,
     EmergencyContact VARCHAR(255),
 	AccPassword VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE InsuranceDetail (
     InsuranceID INT PRIMARY KEY,
@@ -21,7 +19,7 @@ CREATE TABLE InsuranceDetail (
     EndDate DATE NOT NULL,
     PatientID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID)
-)
+);
 
 CREATE TABLE Receptionist (
     ReceptionistID INT AUTO_INCREMENT PRIMARY KEY,
@@ -32,9 +30,9 @@ CREATE TABLE Receptionist (
     ReceptionistPhone VARCHAR(20) NOT NULL CHECK(ReceptionistPhone LIKE('0%')),
     ReceptionistEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
-)
+);
 
-ALTER TABLE Receptionist ADD CONSTRAINT CHECK_RECEPT_JOINED CHECK(ReceptionistBirthdate < DateJoined)
+ALTER TABLE Receptionist ADD CONSTRAINT CHECK_RECEPT_JOINED CHECK(ReceptionistBirthdate < DateJoined);
 
 CREATE TABLE Doctor (
     DoctorID INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,9 +45,9 @@ CREATE TABLE Doctor (
     DoctorPhone VARCHAR(20) NOT NULL CHECK(DoctorPhone LIKE('0%')),
     DoctorEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
-)
+);
 
-ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJoined)
+ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJoined);
 
 CREATE TABLE Appointment (
     AppointmentID INT AUTO_INCREMENT PRIMARY KEY AUTO_INCREMENT,
@@ -61,7 +59,9 @@ CREATE TABLE Appointment (
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID),
     FOREIGN KEY (ReceptionistID) REFERENCES Receptionist (ReceptionistID),
     FOREIGN KEY (DoctorID) REFERENCES Doctor (DoctorID)
-)
+);
+
+ALTER TABLE Appointment ADD CONSTRAINT CHECK_APPOINTMENT_TIME CHECK(TIME(ConsultationTime) BETWEEN '07:00:00' AND '15:30:00');
 
 CREATE TABLE Consultation (
     ConsultationID INT AUTO_INCREMENT PRIMARY KEY,
@@ -72,9 +72,9 @@ CREATE TABLE Consultation (
     DoctorID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID),
     FOREIGN KEY (DoctorID) REFERENCES Doctor (DoctorID)
-)
+);
 
-ALTER TABLE Consultation ADD CONSTRAINT CHECK_CONSULT_ENDTIME CHECK(EndTime > StartTime)
+ALTER TABLE Consultation ADD CONSTRAINT CHECK_CONSULT_ENDTIME CHECK(EndTime > StartTime);
 
 CREATE TABLE LaboratoryPhysician (
     LabPhysID INT AUTO_INCREMENT PRIMARY KEY,
@@ -86,9 +86,9 @@ CREATE TABLE LaboratoryPhysician (
     LabPhysPhone VARCHAR(20) NOT NULL,
     LabPhysEmail VARCHAR(255) NOT NULL UNIQUE,
 	AccPassword VARCHAR(255) NOT NULL
-)
+);
 
-ALTER TABLE LaboratoryPhysician ADD CONSTRAINT CHECK_LP_JOINED CHECK(LabPhysBirthdate < DateJoined)
+ALTER TABLE LaboratoryPhysician ADD CONSTRAINT CHECK_LP_JOINED CHECK(LabPhysBirthdate < DateJoined);
 
 CREATE TABLE MedicalTest (
     TestID INT AUTO_INCREMENT PRIMARY KEY,
@@ -100,12 +100,12 @@ CREATE TABLE MedicalTest (
     LabPhysID INT NOT NULL,
     FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
     FOREIGN KEY (LabPhysID) REFERENCES LaboratoryPhysician (LabPhysID)
-)
+);
 
 CREATE TABLE MedicineManufaturer (
 	ManufID INT AUTO_INCREMENT PRIMARY KEY,
 	ManufName VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE Medicine (
     MedID INT AUTO_INCREMENT PRIMARY KEY,
@@ -116,7 +116,7 @@ CREATE TABLE Medicine (
     Quantity INT NOT NULL,
 	ManufID INT NOT NULL,
 	FOREIGN KEY (ManufID) REFERENCES MedicineManufaturer (ManufID)
-)
+);
 
 CREATE TABLE Consultation_Medicine (
 	ConsultationID INT NOT NULL,
@@ -125,14 +125,14 @@ CREATE TABLE Consultation_Medicine (
 	PRIMARY KEY (ConsultationID, MedID),
 	FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
 	FOREIGN KEY (MedID) REFERENCES Medicine (MedID)
-)
+);
 
 CREATE TABLE Diagnosis (
     DiagnosisID INT AUTO_INCREMENT PRIMARY KEY,
     DiagnosisName VARCHAR(255) NOT NULL,
     DiagnosisDesc VARCHAR(255) NOT NULL,
     Severity VARCHAR(50) NOT NULL
-)
+);
 
 CREATE TABLE Consultation_Diagnosis (
 	DiagnosisID INT NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE Consultation_Diagnosis (
 	PRIMARY KEY (DiagnosisID, ConsultationID),
 	FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
 	FOREIGN KEY (DiagnosisID) REFERENCES Diagnosis (DiagnosisID)
-)
+);
 
 CREATE TABLE Bill (
     BillID INT AUTO_INCREMENT PRIMARY KEY,
@@ -152,4 +152,4 @@ CREATE TABLE Bill (
 	InsuranceID INT,
 	FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
 	FOREIGN KEY (InsuranceID) REFERENCES InsuranceDetail (InsuranceID)
-)
+);

@@ -32,7 +32,7 @@ BEGIN
     SET oldQuantity = OLD.Quantity;
     IF EXISTS (SELECT 1 FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) THEN
 		IF (NEW.MedID = OLD.MedID) THEN
-			IF (SELECT ((Quantity + oldQuantity) - newQuantity) FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
+			IF (SELECT Quantity + oldQuantity - newQuantity FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
 				UPDATE MEDICINE
 				SET Quantity = (Quantity + oldQuantity) - newQuantity
 				WHERE MEDICINE.MedID = NEW.MedID;
@@ -40,7 +40,7 @@ BEGIN
 				SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Số lượng thuốc cập nhật lớn hơn số lượng sẵn có!';
 			END IF;
 		ELSE
-			IF (SELECT (Quantity - newQuantity) FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
+			IF (SELECT Quantity - newQuantity FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
 				UPDATE MEDICINE
                 SET Quantity = Quantity - newQuantity
 				WHERE MEDICINE.MedID = NEW.MedID;
@@ -180,5 +180,32 @@ BEGIN
 END
 //
 DELIMITER ;
+drop trigger Appointment_Time_INSERT
+drop trigger Appointment_Time_UPDATE
+/*Các cuộc hẹn khám bệnh phải được đặt cách nhau 30 phút*/
+DELIMITER //
+CREATE TRIGGER Appointment_Time_INSERT
+BEFORE INSERT ON Appointment
+FOR EACH ROW
+BEGIN
+	IF (SELECT MINUTE(NEW.ConsultationTime)) != 0 AND (SELECT MINUTE(NEW.ConsultationTime)) != 30 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian phải cách nhau ít nhất 30 phút.';
+	END IF;
+/*Thao tác này có nghĩa là bắt buộc giờ đặt lịch phải là 00 phút hoặc 30 phút (ví dụ 7:00; 7:30; 8:00;...) để đảm bảo các cuộc hẹn phải cách nhau 30 phút.*/
+END
+//
+DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER Appointment_Time_UPDATE
+BEFORE UPDATE ON Appointment
+FOR EACH ROW
+BEGIN
+	IF (SELECT MINUTE(NEW.ConsultationTime)) != 0 AND (SELECT MINUTE(NEW.ConsultationTime)) != 30 THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian phải cách nhau ít nhất 30 phút.';
+	END IF;
+/*Thao tác này có nghĩa là bắt buộc giờ đặt lịch phải là 00 phút hoặc 30 phút (ví dụ 7:00; 7:30; 8:00;...) để đảm bảo các cuộc hẹn phải cách nhau 30 phút.*/
+END
+//
+DELIMITER ;
 
