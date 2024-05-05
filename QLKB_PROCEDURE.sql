@@ -134,4 +134,56 @@ END
 //
 DELIMITER ;
 
+/*Thống kê thuốc nào được kê đơn nhiều nhất trong tháng.*/
+DELIMITER //
+CREATE PROCEDURE Medicine_ofMonth (IN in_Month INT)
+BEGIN
+	SELECT Medicine.MedID, MedName, COUNT(Consultation_Medicine.MedID) AS Quantity_of_MoNth
+    FROM Medicine, Consultation_Medicine, Consultation
+    WHERE MONTH(Consultation.StartTime) = in_Month AND Consultation.ConsultationID = Consultation_Medicine.ConsultationID AND Consultation_Medicine.MedID = Medicine.MedID
+    GROUP BY Medicine.MedID, MedName
+    ORDER BY COUNT(Consultation_Medicine.MedID) DESC;
+END    
+//
+DELIMITER ;
+
+/*Thống kê doanh thu từng tháng của từng năm.*/
+DELIMITER //
+CREATE PROCEDURE Revenue_ofMonth()
+BEGIN
+	SELECT YEAR(BillDate) AS Year, MONTH(BillDate) AS Month, COALESCE(SUM(Total), 0) AS Revenue
+    FROM Bill
+    GROUP BY YEAR(BillDate), MONTH(BillDate)
+    ORDER BY YEAR(BillDate), MONTH(BillDate);
+END
+//
+DELIMITER ;
+
+/*Xóa các cuộc hẹn đã hết hạn. Ở đây quy định cuộc hẹn nào quá 7 cách ngày hiện tại sẽ bị xóa khỏi CSDL (Có sử dụng cursor)*/
+DELIMITER //
+CREATE PROCEDURE Delete_Expired_Appointments()
+BEGIN
+	DECLARE Expired_Date DATETIME;
+    DECLARE done BOOL DEFAULT false;
+    DECLARE loopAppointmentID INT;
+    DECLARE loopConsultationTime DATETIME;
+    DECLARE cur CURSOR FOR SELECT AppointmentID, ConsultationTime FROM Appointment;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
+    
+	SET Expired_Date = DATE_SUB(NOW(), INTERVAL 7 DAY);
+    
+    OPEN cur;
+    delete_expired_appointments_loop: LOOP
+		FETCH cur INTO loopAppointmentID, loopConsultationTime;
+        IF done = true THEN LEAVE delete_expired_appointments_loop;
+        END IF;
+        IF (loopConsultationTime < Expired_Date) THEN
+			DELETE FROM Appointment
+            WHERE AppointmentID = loopAppointmentID;
+		END IF;
+	END LOOP;
+    CLOSE cur;
+END
+//
+DELIMITER ;
 

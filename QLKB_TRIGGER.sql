@@ -130,28 +130,15 @@ END
 //
 DELIMITER ;
 
-/*Kiểm tra lịch trống của bác sĩ khi đặt lịch. (sử dụng cursor)*/
+/*Kiểm tra lịch trống của bác sĩ khi đặt lịch.*/
 DELIMITER //
 CREATE TRIGGER Appointment_Check_Available_INSERT
 BEFORE INSERT ON Appointment
 FOR EACH ROW
 BEGIN
-    DECLARE done BOOL DEFAULT false;
-    DECLARE loopDoctorID INT;
-    DECLARE loopConsultationTime DATETIME;
-	DECLARE cur CURSOR FOR SELECT DoctorID, ConsultationTime FROM Appointment WHERE DoctorID = NEW.DoctorID ;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
-    
-    OPEN CUR;
-    check_available: LOOP
-		FETCH cur INTO loopDoctorID, loopConsultationTime;
-        IF done = true THEN LEAVE check_available; 
-        END IF;
-        IF (loopDoctorID = NEW.DoctorID AND loopConsultationTime = NEW.ConsultationTime) THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
-		END IF;
-	END LOOP;
-        CLOSE cur;
+    IF EXISTS (SELECT 1 FROM Appointment WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
+	END IF;
 END
 //
 DELIMITER ;
@@ -161,27 +148,13 @@ CREATE TRIGGER Appointment_Check_Available_UPDATE
 BEFORE UPDATE ON Appointment
 FOR EACH ROW
 BEGIN
-    DECLARE done BOOL DEFAULT false;
-    DECLARE loopDoctorID INT;
-    DECLARE loopConsultationTime DATETIME;
-	DECLARE cur CURSOR FOR SELECT DoctorID, ConsultationTime FROM Appointment WHERE DoctorID = NEW.DoctorID ;
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
-    
-    OPEN CUR;
-    check_available: LOOP
-		FETCH cur INTO loopDoctorID, loopConsultationTime;
-        IF done = true THEN LEAVE check_available; 
-        END IF;
-        IF (loopDoctorID = NEW.DoctorID AND loopConsultationTime = NEW.ConsultationTime) THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
-		END IF;
-	END LOOP;
-        CLOSE cur;
+    IF EXISTS (SELECT 1 FROM Appointment WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
+	END IF;
 END
 //
 DELIMITER ;
-drop trigger Appointment_Time_INSERT
-drop trigger Appointment_Time_UPDATE
+
 /*Các cuộc hẹn khám bệnh phải được đặt cách nhau 30 phút*/
 DELIMITER //
 CREATE TRIGGER Appointment_Time_INSERT
