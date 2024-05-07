@@ -7,6 +7,7 @@ BEGIN
 	DECLARE newQuantity INT;
     SET newQuantity = NEW.Quantity;
     IF EXISTS (SELECT 1 FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) THEN
+    /*Trừ số lượng thuốc sẵn có trong kho*/
 		IF (SELECT Quantity - newQuantity FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
 			UPDATE MEDICINE
             SET Quantity = Quantity - newQuantity
@@ -86,7 +87,7 @@ BEGIN
 						FROM InsuranceDetail
 						WHERE InsuranceID = NEW.InsuranceID);
     SET consultTime = (SELECT StartTime
-						FROM Cosultation
+						FROM Consultation
 						WHERE ConsultationID = NEW.ConsultationID);
     IF (insuranceDate < consultTime) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Bảo hiểm đã hết hạn!';
@@ -121,7 +122,7 @@ BEGIN
 						FROM InsuranceDetail
 						WHERE InsuranceID = NEW.InsuranceID);
     SET consultTime = (SELECT StartTime
-						FROM Cosultation
+						FROM Consultation
 						WHERE ConsultationID = NEW.ConsultationID);
     IF (insuranceDate < consultTime) THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Bảo hiểm đã hết hạn!';
@@ -136,7 +137,10 @@ CREATE TRIGGER Appointment_Check_Available_INSERT
 BEFORE INSERT ON Appointment
 FOR EACH ROW
 BEGIN
-    IF EXISTS (SELECT 1 FROM Appointment WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime) THEN
+    IF EXISTS (SELECT 1 
+				FROM Appointment 
+				WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime)
+		THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
 	END IF;
 END
@@ -148,7 +152,10 @@ CREATE TRIGGER Appointment_Check_Available_UPDATE
 BEFORE UPDATE ON Appointment
 FOR EACH ROW
 BEGIN
-    IF EXISTS (SELECT 1 FROM Appointment WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime) THEN
+    IF EXISTS (SELECT 1 
+				FROM Appointment 
+				WHERE DoctorID = NEW.DoctorID AND ConsultationTime = NEW.ConsultationTime)
+		THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Thời gian bạn đặt không còn trống!';
 	END IF;
 END
@@ -182,7 +189,7 @@ END
 //
 DELIMITER ;
 
-/*Tự động tính trị giá hóa đơn*/
+/*Tự động tính trị giá hóa đơn khi INSERT*/
 DELIMITER //
 CREATE TRIGGER Bill_Total_INSERT
 BEFORE INSERT ON Bill
@@ -192,15 +199,48 @@ BEGIN
     DECLARE trigger_total FLOAT;
     DECLARE discount DECIMAL(5,2);
     
+    /*Gọi hàm tính trị giá hóa đơn*/
     SET trigger_pretotal = billValueCalculate(NEW.ConsultationID);
     
     SET NEW.PreTotal = trigger_pretotal;
+    SET NEW.Total = trigger_pretotal;
     
+    /*Nếu có sử dụng bảo hiểm thì tính giảm giá*/
     IF NEW.InsuranceID IS NOT NULL THEN
 		SELECT DiscountPercent INTO discount
         FROM InsuranceDetail
         WHERE InsuranceID = NEW.InsuranceID;
 		SET trigger_total = trigger_pretotal - trigger_pretotal * discount;
+		SET NEW.Total = trigger_total;
+	END IF;
+END
+//
+DELIMITER ;
+
+/*Tự động tính trị giá hóa đơn khi UPDATE*/
+DELIMITER //
+CREATE TRIGGER Bill_Total_UPDATE
+BEFORE UPDATE ON Bill
+FOR EACH ROW
+BEGIN
+	DECLARE discount DECIMAL(5,2);
+    DECLARE trigger_total FLOAT;
+    
+    /*Ràng buộc không được phép sửa PreTotal*/
+	IF (NEW.PreTotal != OLD.PreTotal) THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Trị giá hóa đơn phải được tính tự động, không được sửa thủ công.';
+	END IF;
+    
+    /*Nếu cập nhật không sử dụng bảo hiểm thì cập nhật lại giá cuối cùng bằng giá ban đầu*/
+	IF NEW.InsuranceID IS NULL THEN
+		SET NEW.Total = OLD.PreTotal;
+        
+	/*Nếu cập nhật có sử dụng bảo hiểm thì cập nhật lại giá cuối*/
+	ELSE 
+		SELECT DiscountPercent INTO discount
+        FROM InsuranceDetail
+        WHERE InsuranceID = NEW.InsuranceID;
+		SET trigger_total = OLD.PreTotal - OLD.PreTotal * discount;
 		SET NEW.Total = trigger_total;
 	END IF;
 END

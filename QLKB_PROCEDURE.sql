@@ -121,26 +121,26 @@ END
 //
 DELIMITER ;
 
-/*Thống kê bệnh nhân mắc bệnh nào nhiều nhất theo tháng.*/
+/*Thống kê bệnh nhân mắc bệnh nào nhiều nhất theo tháng-năm.*/
 DELIMITER //
-CREATE PROCEDURE Diagnosis_ofMonth (IN in_Month INT)
+CREATE PROCEDURE Diagnosis_ofMonth (IN in_Month INT, IN in_Year INT)
 BEGIN
 	SELECT Consultation_Diagnosis.DiagnosisID, DiagnosisName, COUNT(Consultation_Diagnosis.DiagnosisID) AS Number_of_Cases
     FROM Diagnosis, Consultation_Diagnosis, Consultation
-    WHERE MONTH(Consultation.StartTime) = in_Month AND Consultation.ConsultationID = Consultation_Diagnosis.ConsultationID AND Consultation_Diagnosis.DiagnosisID = Diagnosis.DiagnosisID
+    WHERE MONTH(Consultation.StartTime) = in_Month AND YEAR( ConsultationConsultation.StartTime) = in_Year AND ConsultationID = Consultation_Diagnosis.ConsultationID AND Consultation_Diagnosis.DiagnosisID = Diagnosis.DiagnosisID
     GROUP BY Consultation_Diagnosis.DiagnosisID, DiagnosisName
     ORDER BY COUNT(Consultation_Diagnosis.DiagnosisID) DESC;
 END
 //
 DELIMITER ;
 
-/*Thống kê thuốc nào được kê đơn nhiều nhất trong tháng.*/
+/*Thống kê thuốc nào được kê đơn nhiều nhất trong tháng-năm.*/
 DELIMITER //
-CREATE PROCEDURE Medicine_ofMonth (IN in_Month INT)
+CREATE PROCEDURE Medicine_ofMonth (IN in_Month INT, IN in_Year INT)
 BEGIN
 	SELECT Medicine.MedID, MedName, COUNT(Consultation_Medicine.MedID) AS Quantity_of_MoNth
     FROM Medicine, Consultation_Medicine, Consultation
-    WHERE MONTH(Consultation.StartTime) = in_Month AND Consultation.ConsultationID = Consultation_Medicine.ConsultationID AND Consultation_Medicine.MedID = Medicine.MedID
+    WHERE MONTH(Consultation.StartTime) = in_Month AND YEAR(Consultation.StartTime) = in_Year AND Consultation.ConsultationID = Consultation_Medicine.ConsultationID AND Consultation_Medicine.MedID = Medicine.MedID
     GROUP BY Medicine.MedID, MedName
     ORDER BY COUNT(Consultation_Medicine.MedID) DESC;
 END    
@@ -170,6 +170,7 @@ BEGIN
     DECLARE cur CURSOR FOR SELECT AppointmentID, ConsultationTime FROM Appointment;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
     
+    /*Đặt ngày hết hạn*/
 	SET Expired_Date = DATE_SUB(NOW(), INTERVAL 7 DAY);
     
     OPEN cur;

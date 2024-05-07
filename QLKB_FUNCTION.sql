@@ -122,7 +122,7 @@ BEGIN
         
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
     
-    SET total = 10;
+    SET total = 0;
     
     /*Tính tổng giá đơn thuốc*/
     OPEN cur_Medicine;
