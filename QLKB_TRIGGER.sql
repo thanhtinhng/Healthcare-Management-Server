@@ -6,7 +6,7 @@ FOR EACH ROW
 BEGIN
 	DECLARE newQuantity INT;
     SET newQuantity = NEW.Quantity;
-    IF EXISTS (SELECT 1 FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedIConsultation_Medicine_Quantity_InsertConsultation_Medicine_Quantity_UpdateD) THEN
+    IF EXISTS (SELECT 1 FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) THEN
 		IF (SELECT Quantity - newQuantity FROM MEDICINE WHERE MEDICINE.MedID = NEW.MedID) >= 0 THEN
 			UPDATE MEDICINE
             SET Quantity = Quantity - newQuantity
@@ -181,4 +181,31 @@ BEGIN
 END
 //
 DELIMITER ;
+
+/*Tự động tính trị giá hóa đơn*/
+DELIMITER //
+CREATE TRIGGER Bill_Total_INSERT
+BEFORE INSERT ON Bill
+FOR EACH ROW
+BEGIN
+	DECLARE trigger_pretotal FLOAT;
+    DECLARE trigger_total FLOAT;
+    DECLARE discount DECIMAL(5,2);
+    
+    SET trigger_pretotal = billValueCalculate(NEW.ConsultationID);
+    
+    SET NEW.PreTotal = trigger_pretotal;
+    
+    IF NEW.InsuranceID IS NOT NULL THEN
+		SELECT DiscountPercent INTO discount
+        FROM InsuranceDetail
+        WHERE InsuranceID = NEW.InsuranceID;
+		SET trigger_total = trigger_pretotal - trigger_pretotal * discount;
+		SET NEW.Total = trigger_total;
+	END IF;
+END
+//
+DELIMITER ;
+
+
 

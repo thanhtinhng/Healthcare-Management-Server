@@ -14,7 +14,7 @@ CREATE TABLE Patient (
 );
 
 CREATE TABLE InsuranceDetail (
-    InsuranceID INT PRIMARY KEY,
+    InsuranceID VARCHAR(20) PRIMARY KEY,
     DiscountPercent DECIMAL(5,2) NOT NULL,
     EndDate DATE NOT NULL,
     PatientID INT NOT NULL,
@@ -112,6 +112,7 @@ CREATE TABLE Medicine (
     MedName VARCHAR(255) NOT NULL,
     MedDesc VARCHAR(255) NOT NULL,
     Unit VARCHAR(50) NOT NULL,
+    PurchasePrice FLOAT NOT NULL,
     Price FLOAT NOT NULL,
     Quantity INT NOT NULL,
 	ManufID INT NOT NULL,
@@ -149,7 +150,11 @@ CREATE TABLE Bill (
     PreTotal FLOAT NOT NULL,
     Total FLOAT NOT NULL,
 	ConsultationID INT NOT NULL,
-	InsuranceID INT,
+	InsuranceID VARCHAR(20),
 	FOREIGN KEY (ConsultationID) REFERENCES Consultation (ConsultationID),
 	FOREIGN KEY (InsuranceID) REFERENCES InsuranceDetail (InsuranceID)
 );
+
+ALTER TABLE Bill MODIFY PreTotal FLOAT DEFAULT 0 NOT NULL;
+ALTER TABLE Bill MODIFY Total FLOAT DEFAULT 0 NOT NULL;
+
