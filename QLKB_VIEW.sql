@@ -43,4 +43,13 @@ JOIN Consultation_Medicine ON Consultation.ConsultationID = Consultation_Medicin
 JOIN Medicine ON Consultation_Medicine.MedID = Medicine.MedID
 ORDER BY ConsultationID;
 
+/*Hiển thị danh sách các cuộc hẹn*/
+CREATE VIEW appointment_VIEW AS
+SELECT AppointmentID, ConsultationTime, Symptom, PatientName, DoctorName, ReceptionistName
+FROM Appointment
+JOIN Patient ON Appointment.PatientID = Patient.PatientID
+JOIN Doctor ON Appointment.DoctorID = Doctor.DoctorID
+JOIN Receptionist ON Appointment.ReceptionistID = Receptionist.ReceptionistID
+ORDER BY Appointment.DoctorID, ConsultationTime;
+
  
