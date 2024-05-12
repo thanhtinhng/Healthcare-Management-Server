@@ -102,7 +102,7 @@ CREATE TABLE MedicalTest (
     FOREIGN KEY (LabPhysID) REFERENCES LaboratoryPhysician (LabPhysID)
 );
 
-CREATE TABLE MedicineManufaturer (
+CREATE TABLE MedicineManufacturer (
 	ManufID INT AUTO_INCREMENT PRIMARY KEY,
 	ManufName VARCHAR(255) NOT NULL
 );
@@ -116,7 +116,7 @@ CREATE TABLE Medicine (
     Price FLOAT NOT NULL,
     Quantity INT NOT NULL,
 	ManufID INT NOT NULL,
-	FOREIGN KEY (ManufID) REFERENCES MedicineManufaturer (ManufID)
+	FOREIGN KEY (ManufID) REFERENCES MedicineManufacturer (ManufID)
 );
 
 CREATE TABLE Consultation_Medicine (

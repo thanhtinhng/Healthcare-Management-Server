@@ -4,3 +4,5 @@
 .idea/
 .env
 test.sql
+connectDB.js
+config.json

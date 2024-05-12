@@ -2,32 +2,21 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Patient extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Receptionist extends Model {
     static associate(models) {
         // define association here
-        Patient.hasOne(models.InsuranceDetail, { foreignKey: 'PatientID' });
-        Patient.hasMany(models.Appointment, { foreignKey: 'PatientID' });
-        Patient.hasMany(models.Consultation, { foreignKey: 'PatientID' });
+        Receptionist.hasMany(models.Appointment, { foreignKey: 'ReceptionistID' });
+        
     }
   };
   
-  Patient.init({
-    PatientID: {
+  Receptionist.init({
+    ReceptionistID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    CitizenID: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    PatientName: {
+    ReceptionistName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -38,18 +27,29 @@ module.exports = (sequelize) => {
         isIn: [[0, 1]] // Giá trị phải là 0 hoặc 1
       }
     },
-    PatientBirthdate: {
+    ReceptionistBirthdate: {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    PatientPhone: {
+    DateJoined: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        customValidator(value) {
+          if (this.ReceptionistBirthdate >= value) {
+            throw new Error('DateJoined must be after ReceptionistBirthdate');
+          }
+        }
+      }
+    },
+    ReceptionistPhone: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         is: ['^0'] // Bắt đầu bằng số 0
       }
     },
-    PatientEmail: {
+    ReceptionistEmail: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -57,23 +57,15 @@ module.exports = (sequelize) => {
         isEmail: true // Kiểm tra định dạng email
       }
     },
-    PatientAddr: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    EmergencyContact: {
-      type: DataTypes.STRING
-    },
     AccPassword: {
       type: DataTypes.STRING,
       allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Patient',
-    tableName: 'Patient',
+    modelName: 'Receptionist',
+    tableName: 'Receptionist',
     timestamps: false // Không sử dụng các cột 'createdAt' và 'updatedAt'
   });
-
-  return Patient;
+  return Receptionist;
 };

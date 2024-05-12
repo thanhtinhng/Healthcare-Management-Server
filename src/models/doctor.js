@@ -2,32 +2,21 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Patient extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Doctor extends Model {
     static associate(models) {
         // define association here
-        Patient.hasOne(models.InsuranceDetail, { foreignKey: 'PatientID' });
-        Patient.hasMany(models.Appointment, { foreignKey: 'PatientID' });
-        Patient.hasMany(models.Consultation, { foreignKey: 'PatientID' });
+        Doctor.hasMany(models.Appointment, { foreignKey: 'DoctorID' });
+        Doctor.hasMany(models.Consultation, { foreignKey: 'DoctorID' });
     }
   };
   
-  Patient.init({
-    PatientID: {
+  Doctor.init({
+    DoctorID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    CitizenID: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    PatientName: {
+    DoctorName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -38,18 +27,37 @@ module.exports = (sequelize) => {
         isIn: [[0, 1]] // Giá trị phải là 0 hoặc 1
       }
     },
-    PatientBirthdate: {
+    DoctorBirthdate: {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    PatientPhone: {
+    DateJoined: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        customValidator(value) {
+          if (this.DoctorBirthdate >= value) {
+            throw new Error('DateJoined must be after DoctorBirthdate');
+          }
+        }
+      }
+    },
+    Specialization: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    Department: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    DoctorPhone: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         is: ['^0'] // Bắt đầu bằng số 0
       }
     },
-    PatientEmail: {
+    DoctorEmail: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
@@ -57,23 +65,16 @@ module.exports = (sequelize) => {
         isEmail: true // Kiểm tra định dạng email
       }
     },
-    PatientAddr: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    EmergencyContact: {
-      type: DataTypes.STRING
-    },
     AccPassword: {
       type: DataTypes.STRING,
       allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Patient',
-    tableName: 'Patient',
+    modelName: 'Doctor',
+    tableName: 'Doctor',
     timestamps: false // Không sử dụng các cột 'createdAt' và 'updatedAt'
   });
 
-  return Patient;
+  return Doctor;
 };
