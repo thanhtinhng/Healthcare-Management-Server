@@ -16,6 +16,65 @@ module.exports = (sequelize) => {
     }
   };
   
+  // Patient.init({
+  //   PatientID: {
+  //     type: DataTypes.INTEGER,
+  //     primaryKey: true,
+  //     autoIncrement: true
+  //   },
+  //   CitizenID: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false,
+  //     unique: true
+  //   },
+  //   PatientName: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false
+  //   },
+  //   Gender: {
+  //     type: DataTypes.INTEGER,
+  //     allowNull: false,
+  //     validate: {
+  //       isIn: [[0, 1]] // Giá trị phải là 0 hoặc 1
+  //     }
+  //   },
+  //   PatientBirthdate: {
+  //     type: DataTypes.DATEONLY,
+  //     allowNull: false
+  //   },
+  //   PatientPhone: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false,
+  //     validate: {
+  //       is: ['^0'] // Bắt đầu bằng số 0
+  //     }
+  //   },
+  //   PatientEmail: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false,
+  //     unique: true,
+  //     validate: {
+  //       isEmail: true // Kiểm tra định dạng email
+  //     }
+  //   },
+  //   PatientAddr: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false
+  //   },
+  //   EmergencyContact: {
+  //     type: DataTypes.STRING
+  //   },
+  //   AccPassword: {
+  //     type: DataTypes.STRING,
+  //     allowNull: false
+  //   }
+  // }, {
+  //   sequelize,
+  //   modelName: 'Patient',
+  //   tableName: 'Patient',
+  //   timestamps: false // Không sử dụng các cột 'createdAt' và 'updatedAt'
+  // });
+
   Patient.init({
     PatientID: {
       type: DataTypes.INTEGER,
@@ -24,34 +83,34 @@ module.exports = (sequelize) => {
     },
     CitizenID: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     PatientName: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     Gender: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       validate: {
         isIn: [[0, 1]] // Giá trị phải là 0 hoặc 1
       }
     },
     PatientBirthdate: {
       type: DataTypes.DATEONLY,
-      allowNull: false
+      allowNull: true
     },
     PatientPhone: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         is: ['^0'] // Bắt đầu bằng số 0
       }
     },
     PatientEmail: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       unique: true,
       validate: {
         isEmail: true // Kiểm tra định dạng email
@@ -59,14 +118,14 @@ module.exports = (sequelize) => {
     },
     PatientAddr: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     EmergencyContact: {
       type: DataTypes.STRING
     },
     AccPassword: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
