@@ -7,9 +7,17 @@ let createNewUser = async (data) => {
     return new Promise (async(resolve, reject) => {
         try {
             let hashPassBcrypt = await hashUserPassword(data.password);
+            let patientName = data.last_name + " " + data.first_name
             await db.Patient.create({
                 PatientEmail: data.email,
                 AccPassword: hashPassBcrypt,
+                CitizenID: data.CCCD,
+                PatientName: patientName,
+                Gender: data.sex,
+                PatientBirthdate: data.birthdate,
+                PatientPhone: data.phone,
+                PatientAddr: data.addr,
+                EmergencyContact: data.emergency,
             })
             resolve('Create patient succeed')
         } catch (error) {
