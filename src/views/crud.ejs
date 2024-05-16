@@ -16,6 +16,9 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <style>
+        .required {
+          color: red;
+        }
         .gradient-custom-3 {
         /* fallback for old browsers */
         background: #84fab0;
@@ -117,6 +120,8 @@
                 <div data-mdb-input-init class="form-outline mb-4">
                   <input type="text" id="emergency" name="emergency" class="form-control form-control-lg" />
                   <label class="form-label" for="emergency">Số liên hệ khẩn cấp</label>
+                </div>
+                
 
                 <div class="form-check justify-content-center mb-5" style="display: flex !important; flex-wrap: nowrap; flex-direction: column; padding-top: 20px;">
                   <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
@@ -130,7 +135,7 @@
                     data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Tạo tài khoảng</button>
                 </div>
 
-                <p class="text-center text-muted mt-5 mb-0">Đã có tài khoảng? <a href="#!"
+                <p class="text-center text-muted mt-5 mb-0">Đã có tài khoảng? <a href="http://localhost:3000/login"
                     class="fw-bold text-body"><u>Đăng nhập</u></a></p>
 
               </form>
