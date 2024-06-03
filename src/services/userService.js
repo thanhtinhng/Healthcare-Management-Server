@@ -21,18 +21,18 @@ let handleUserLogin = (email, password) => {
                     }
                     else{
                         userData.errCode = 3
-                        userData.errMessage = 'Wrong Password!'
+                        userData.errMessage = 'Tài khoảng hoặc mật khẩu sai!'
                     }
                 }
                 else{
                     userData.errCode = 2
-                    userData.errMessage = "User is not found!"
+                    userData.errMessage = "Tài khoảng hoặc mật khẩu sai!"
                 }
             }
             else
             {
                 userData.errCode = 1
-                userData.errMessage = "Your email is not exists!"
+                userData.errMessage = "Tài khoảng hoặc mật khẩu sai!"
             }
             resolve(userData)
         } catch (error) {
