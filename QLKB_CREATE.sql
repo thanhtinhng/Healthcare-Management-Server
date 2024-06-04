@@ -54,7 +54,7 @@ CREATE TABLE Appointment (
     ConsultationTime DATETIME NOT NULL,
     Symptom VARCHAR(255) NOT NULL,
 	PatientID INT NOT NULL,
-    ReceptionistID INT NOT NULL,
+    ReceptionistID INT,
     DoctorID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID),
     FOREIGN KEY (ReceptionistID) REFERENCES Receptionist (ReceptionistID),
