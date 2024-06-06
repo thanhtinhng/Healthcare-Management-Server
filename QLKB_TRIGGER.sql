@@ -200,7 +200,13 @@ BEGIN
     DECLARE discount DECIMAL(5,2);
     
     /*Gọi hàm tính trị giá hóa đơn*/
-    SET trigger_pretotal = billValueCalculate(NEW.ConsultationID);
+    IF NEW.BillType = 0 THEN
+		SET trigger_pretotal = billPrescriptionValueCalculate(NEW.ConsultationID);
+	ELSE
+		IF NEW.BillType = 1 THEN
+			SET trigger_pretotal = billTestValueCalculate(NEW.ConsultationID);
+		END IF;
+	END IF;
     
     SET NEW.PreTotal = trigger_pretotal;
     SET NEW.Total = trigger_pretotal;
@@ -210,7 +216,7 @@ BEGIN
 		SELECT DiscountPercent INTO discount
         FROM InsuranceDetail
         WHERE InsuranceID = NEW.InsuranceID;
-		SET trigger_total = trigger_pretotal - trigger_pretotal * discount;
+		SET trigger_total = trigger_pretotal - trigger_pretotal * (discount/100);
 		SET NEW.Total = trigger_total;
 	END IF;
 END
@@ -240,7 +246,7 @@ BEGIN
 		SELECT DiscountPercent INTO discount
         FROM InsuranceDetail
         WHERE InsuranceID = NEW.InsuranceID;
-		SET trigger_total = OLD.PreTotal - OLD.PreTotal * discount;
+		SET trigger_total = OLD.PreTotal - OLD.PreTotal * (discount/100);
 		SET NEW.Total = trigger_total;
 	END IF;
 END

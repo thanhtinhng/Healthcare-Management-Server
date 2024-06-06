@@ -98,9 +98,9 @@ END;
 //
 DELIMITER ;
 
-/*Tính trị giá hóa đơn*/
+/*Tính trị giá hóa đơn thuốc*/
 DELIMITER //
-CREATE FUNCTION billValueCalculate(in_ConsultationID INT)
+CREATE FUNCTION billPrescriptionValueCalculate(in_ConsultationID INT)
 RETURNS FLOAT
 DETERMINISTIC
 READS SQL DATA
@@ -108,17 +108,11 @@ BEGIN
 	DECLARE total FLOAT;
     DECLARE loopQuantity INT;
     DECLARE loopPrice INT;
-    DECLARE loopFee FLOAT;
     DECLARE done BOOL DEFAULT false;
     DECLARE cur_Medicine CURSOR FOR
 		SELECT consultation_medicine.Quantity, Price
         FROM consultation_medicine JOIN Medicine ON consultation_medicine.MedID = Medicine.MedID
         WHERE consultation_medicine.ConsultationID = in_ConsultationID;
-
-	DECLARE cur_Test CURSOR FOR
-		SELECT TestFee
-        FROM MedicalTest
-        WHERE MedicalTest.ConsultationID = in_ConsultationID;
         
 	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
     
@@ -134,8 +128,31 @@ BEGIN
 	END LOOP;
     CLOSE cur_Medicine;
     
-    SET done = false;
+    RETURN total;
+END
+//
+DELIMITER ;
+
+/*Tính trị giá hóa đơn xét nghiệm*/
+DELIMITER //
+CREATE FUNCTION billTestValueCalculate(in_ConsultationID INT)
+RETURNS FLOAT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE total FLOAT;
+    DECLARE loopFee FLOAT;
+    DECLARE done BOOL DEFAULT false;
+
+	DECLARE cur_Test CURSOR FOR
+		SELECT TestFee
+        FROM MedicalTest
+        WHERE MedicalTest.ConsultationID = in_ConsultationID;
+        
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = true;
     
+    SET total = 0;
+
     /*Tính tổng giá đơn xét nghiệm*/
     OPEN cur_Test;
     test_total_loop: LOOP
@@ -145,6 +162,7 @@ BEGIN
         SET total = total + loopFee;
 	END LOOP;
     CLOSE cur_Test;
+    
     RETURN total;
 END
 //
