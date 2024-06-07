@@ -14,6 +14,21 @@ let getDoctorByDepartment = async (req, res) => {
     }
 } 
 
+let getDoctorById = async (req, res) => {
+    const doctorId = req.query.doctorId;
+    try {
+        let doctor = await doctorService.getDoctorById(doctorId);
+        res.json(doctor);
+    } catch (error) {
+        console.log(error)
+        return res.status(200).json({
+            errCode: -1,
+            message: 'Error from server...'
+        })
+    }
+}
+
 module.exports = {
     getDoctorByDepartment: getDoctorByDepartment,
+    getDoctorById: getDoctorById
 }

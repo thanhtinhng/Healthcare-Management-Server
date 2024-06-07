@@ -9,11 +9,9 @@ let initWebRoutes = (app) => {
     router.get("/", homeController.getHomePage)
     router.get("/crud", homeController.getCRUD);
     router.post("/post-crud", homeController.postCRUD);
-
     router.post("/api/login", userController.handleLogin);
-
     router.get("/api/doctor-by-department", doctorController.getDoctorByDepartment)
-
+    router.get("/api/doctor-by-id", doctorController.getDoctorById)
 
     return app.use("/", router)
 }
