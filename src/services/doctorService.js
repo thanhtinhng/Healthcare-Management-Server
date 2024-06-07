@@ -7,7 +7,8 @@ let getDoctorByDepartment = (departmentId) => {
             let doctors = await db.Doctor.findAll({
                 where: {
                     Department: departmentId
-                }
+                },
+                attributes: { exclude: ['AccPassword'] }
             })
             if (doctors && doctors.length > 0) {
                 doctorData.errCode = 0
