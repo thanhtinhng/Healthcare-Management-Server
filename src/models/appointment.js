@@ -18,20 +18,20 @@ module.exports = (sequelize) => {
       autoIncrement: true
     },
     ConsultationTime: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isConsultationTimeValid(value) {
-          const time = value.toLocaleTimeString('en-US', { hour12: false });
-          if (time < '07:00:00' || time > '15:30:00') {
-            throw new Error('Consultation time must be between 07:00:00 and 15:30:00');
-          }
-        }
-      }
+      // validate: {
+      //   isConsultationTimeValid(value) {
+      //     const time = value.toLocaleTimeString('en-US', { hour12: false });
+      //     if (time < '07:00:00' || time > '15:30:00') {
+      //       throw new Error('Consultation time must be between 07:00:00 and 15:30:00');
+      //     }
+      //   }
+      // }
     },
     Symptom: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     PatientID: {
       type: DataTypes.INTEGER,
@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
     },
     ReceptionistID: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     DoctorID: {
       type: DataTypes.INTEGER,

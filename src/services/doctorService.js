@@ -52,7 +52,51 @@ let getDoctorById = (doctorId) => {
     })
 }
 
+let handleUserAppoint = async (dateTime, userId, doctorId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let appointmentData = {}
+            let isExists = await checkAvailableAppointment(dateTime, doctorId)
+            if (isExists === false) {
+                await db.Appointment.create({
+                    DoctorID: doctorId,
+                    PatientID: userId,
+                    ConsultationTime: dateTime
+                })
+                appointmentData.errCode = 0
+                appointmentData.errMessage = 'OK'
+            }
+            else if (isExists) {
+                appointmentData.errCode = 2
+                appointmentData.errMessage = 'Lịch không còn trống!'
+            }
+            resolve(appointmentData)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+let checkAvailableAppointment = async (dateTime, doctorId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            
+            let appointment = await db.Appointment.findOne({
+                where: {
+                    DoctorID: doctorId,
+                    ConsultationTime: dateTime
+                }
+            })
+            if (appointment) resolve(true)
+            else resolve(false)
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     getDoctorByDepartment: getDoctorByDepartment,
-    getDoctorById: getDoctorById
+    getDoctorById: getDoctorById,
+    handleUserAppoint: handleUserAppoint
 }
