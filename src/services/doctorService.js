@@ -52,10 +52,11 @@ let getDoctorById = (doctorId) => {
     })
 }
 
-let handleUserAppoint = async (dateTime, userId, doctorId) => {
+let handleUserAppoint = async (date, time, userId, doctorId) => {
     return new Promise(async(resolve, reject) => {
         try {
             let appointmentData = {}
+            let dateTime = date + ' ' + time
             let isExists = await checkAvailableAppointment(dateTime, doctorId)
             if (isExists === false) {
                 await db.Appointment.create({

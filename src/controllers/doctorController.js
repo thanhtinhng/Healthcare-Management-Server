@@ -29,32 +29,27 @@ let getDoctorById = async (req, res) => {
 }
 
 let handleAppoint = async (req, res) => {
-    try {
-        let dateTime = req.body.dateTime
-        let userId = req.body.userId
-        let doctorId = req.body.doctorId
+    let date = req.body.date
+    let time = req.body.time
+    let userId = req.body.userId
+    let doctorId = req.body.doctorId
 
-        if (!dateTime) {
-            return res.status(200).json({
-                errCode: 1,
-                message: "Vui lòng chọn ngày hoặc giờ!"
-            })
-        }
-
-        let appointmentData = await doctorService.handleUserAppoint(dateTime, userId, doctorId)
-
-        return res.status(200).json({
-            errCode: appointmentData.errCode,
-            message: appointmentData.errMessage,
-        })
-    } catch (error) {
-        console.log(error)
-        return res.status(200).json({
-            errCode: -1,
-            message: 'Error from server...'
+    if (!date || !time) {
+        return res.status(500).json({
+            errCode: 1,
+            message: "Vui lòng chọn ngày hoặc giờ!"
         })
     }
+
+    let appointmentData = await doctorService.handleUserAppoint(date, time, userId, doctorId)
+
+    return res.status(200).json({
+        errCode: appointmentData.errCode,
+        message: appointmentData.errMessage
+    })
 }
+    
+
 
 module.exports = {
     getDoctorByDepartment: getDoctorByDepartment,
