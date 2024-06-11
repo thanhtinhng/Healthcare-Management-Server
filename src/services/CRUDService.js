@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import db from '../models/index'
 
 const salt = bcrypt.genSaltSync(10);
-//TEST
+
 let createNewUser = async (data) => {
     return new Promise (async(resolve, reject) => {
         try {
