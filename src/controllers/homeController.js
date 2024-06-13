@@ -4,7 +4,7 @@ import CRUDService from '../services/CRUDService'
 let getHomePage = async (req, res) => {
     //return res.render('homepage.ejs')
     try {
-        let data = await db.Doctor.findAll();
+        let data = await db.Medicine.findAll();
         console.log(data)
         return res.render('homepage.ejs', {
             data: JSON.stringify(data)
