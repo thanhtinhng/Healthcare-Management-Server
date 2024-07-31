@@ -2,16 +2,16 @@ import db from '../models/index'
 import CRUDService from '../services/CRUDService'
 
 let getHomePage = async (req, res) => {
-    //return res.render('homepage.ejs')
-    try {
-        let data = await db.Medicine.findAll();
-        console.log(data)
-        return res.render('homepage.ejs', {
-            data: JSON.stringify(data)
-        })
-    } catch (e) {
-        console.log(e)
-    }
+    return res.render('homepage.ejs')
+    // try {
+    //     let data = await db.Medicine.findAll();
+    //     console.log(data)
+    //     return res.render('homepage.ejs', {
+    //         data: JSON.stringify(data)
+    //     })
+    // } catch (e) {
+    //     console.log(e)
+    // }
 }
 
 let getCRUD = (req, res) => {
