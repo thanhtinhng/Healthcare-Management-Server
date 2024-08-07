@@ -30,13 +30,38 @@ let hashUserPassword = (pass) => {
     return new Promise (async (resolve, reject) => {
         try {
             let hashPass = bcrypt.hashSync(pass, salt);
-            resolve(hashPass);
+            resolve(hashPass)
         } catch (error) {
-            reject(error);
+            reject(error)
         }
     })
 }
 
+let createNewDoctor = async (data) => {
+    return new Promise (async(resolve, reject) => {
+        try {
+            let hashPassBcrypt = await hashUserPassword(data.password)
+            let doctorName = data.last_name + " " + data.first_name
+            await db.Doctor.create({
+                DoctorName: doctorName,
+                Gender: data.sex,
+                DoctorBirthdate: data.birthdate,
+                DateJoined: data.datejoin,
+                Specialization: data.Specialization,
+                Department: data.department,
+                DoctorPhone: data.phone,
+                DoctorEmail: data.email,
+                AccPassword: hashPassBcrypt
+            })
+            resolve('Create patient succeed')
+        } catch (error) {
+            reject(error)
+        }
+    })
+
+}
+
 module.exports = {
-    createNewUser: createNewUser
+    createNewUser: createNewUser,
+    createNewDoctor: createNewDoctor
 }

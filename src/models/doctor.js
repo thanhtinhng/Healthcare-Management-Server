@@ -71,7 +71,8 @@ module.exports = (sequelize) => {
     },
     RoleId: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 'R2'
     }
   }, {
     sequelize,
