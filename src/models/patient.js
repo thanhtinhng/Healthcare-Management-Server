@@ -70,7 +70,8 @@ module.exports = (sequelize) => {
     },
     RoleId: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: 'R3'
     }
   }, {
     sequelize,

@@ -7,9 +7,10 @@ let router = express.Router();
 
 let initWebRoutes = (app) => {
     router.get("/", homeController.getHomePage)
-    router.get("/crud", homeController.getCRUD);
-    router.post("/post-patient-crud", homeController.postPatientCRUD);
-   // router.post("/new-doctor", homeController.postDoctorCRUD)
+    router.get("/new-patient-form", homeController.getNewPatientForm);
+    router.get("/new-doctor-form", homeController.getNewDoctorForm);
+    router.post("/new-patient", homeController.postPatientCRUD);
+    router.post("/new-doctor", homeController.postDoctorCRUD)
     router.post("/api/login", userController.handleLogin);
     router.get("/api/doctor-by-department", doctorController.getDoctorByDepartment)
     router.get("/api/doctor-by-id", doctorController.getDoctorById)

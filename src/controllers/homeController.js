@@ -14,8 +14,8 @@ let getHomePage = async (req, res) => {
     // }
 }
 
-let getCRUD = (req, res) => {
-    return res.render('crud.ejs');
+let getNewPatientForm = (req, res) => {
+    return res.render('newpatient.ejs');
 }
 
 let postPatientCRUD = async (req, res) => {
@@ -25,8 +25,21 @@ let postPatientCRUD = async (req, res) => {
     return res.send("post crud")
 }
 
+let getNewDoctorForm = (req, res) => {
+    return res.render('newdoctor.ejs');
+}
+
+let postDoctorCRUD = async (req, res) => {
+    let message = await CRUDService.createNewDoctor(req.body)
+    console.log(message)
+    res.redirect('http://localhost:8080/new-doctor-form')
+    return res.send("post crud")
+}
+
 module.exports = {
     getHomePage: getHomePage,
-    getCRUD: getCRUD,
-    postPatientCRUD: postPatientCRUD
+    getNewPatientForm: getNewPatientForm,
+    postPatientCRUD: postPatientCRUD,
+    postDoctorCRUD: postDoctorCRUD,
+    getNewDoctorForm: getNewDoctorForm
 }
