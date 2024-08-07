@@ -67,6 +67,10 @@ module.exports = (sequelize) => {
     AccPassword: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    RoleId: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     sequelize,

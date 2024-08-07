@@ -1,5 +1,25 @@
 CREATE DATABASE QLKB;
 
+CREATE TABLE Allcode (
+	id int AUTO_INCREMENT PRIMARY KEY,
+    `type` varchar(50),
+    `key` varchar(50),
+    `value` varchar(255)
+);
+
+CREATE TABLE Admins (
+    AdminID INT AUTO_INCREMENT PRIMARY KEY,
+    CitizenID VARCHAR(20) NOT NULL UNIQUE,
+    AdminName VARCHAR(255) NOT NULL,
+    Gender INT NOT NULL CHECK (Gender IN(0, 1)), /*0:Nam, 1: Nu*/
+    AdminBirthdate DATE NOT NULL,
+    AdminPhone VARCHAR(20) NOT NULL,
+    AdminEmail VARCHAR(255) NOT NULL UNIQUE,
+    AdminAddr VARCHAR(255) NOT NULL,
+	AccPassword VARCHAR(255) NOT NULL,
+    RoleId VARCHAR(2) NOT NULL DEFAULT 'R1'
+);
+
 CREATE TABLE Patient (
     PatientID INT AUTO_INCREMENT PRIMARY KEY,
     CitizenID VARCHAR(20) NOT NULL UNIQUE,
@@ -10,7 +30,8 @@ CREATE TABLE Patient (
     PatientEmail VARCHAR(255) NOT NULL UNIQUE,
     PatientAddr VARCHAR(255) NOT NULL,
     EmergencyContact VARCHAR(255),
-	AccPassword VARCHAR(255) NOT NULL
+	AccPassword VARCHAR(255) NOT NULL,
+    RoleId VARCHAR(2) NOT NULL DEFAULT 'R3'
 );
 
 CREATE TABLE InsuranceDetail (
@@ -44,7 +65,8 @@ CREATE TABLE Doctor (
     Department VARCHAR(255) NOT NULL,
     DoctorPhone VARCHAR(20) NOT NULL CHECK(DoctorPhone LIKE('0%')),
     DoctorEmail VARCHAR(255) NOT NULL UNIQUE,
-	AccPassword VARCHAR(255) NOT NULL
+	AccPassword VARCHAR(255) NOT NULL,
+    RoleId VARCHAR(2) NOT NULL DEFAULT 'R2'
 );
 
 ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJoined);

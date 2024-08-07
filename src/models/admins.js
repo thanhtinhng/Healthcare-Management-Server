@@ -2,21 +2,30 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  class Doctor extends Model {
+  class Admin extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     static associate(models) {
         // define association here
-        Doctor.hasMany(models.Appointment, { foreignKey: 'DoctorID' });
-        Doctor.hasMany(models.Consultation, { foreignKey: 'DoctorID' });
+        
     }
   };
   
-  Doctor.init({
-    DoctorID: {
+  Admin.init({
+    AdminID: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true
     },
-    DoctorName: {
+    CitizenID: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    AdminName: {
       type: DataTypes.STRING,
       allowNull: false
     },
@@ -27,43 +36,28 @@ module.exports = (sequelize) => {
         isIn: [[0, 1]] // Giá trị phải là 0 hoặc 1
       }
     },
-    DoctorBirthdate: {
+    AdminBirthdate: {
       type: DataTypes.DATEONLY,
       allowNull: false
     },
-    DateJoined: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      validate: {
-        customValidator(value) {
-          if (this.DoctorBirthdate >= value) {
-            throw new Error('DateJoined must be after DoctorBirthdate');
-          }
-        }
-      }
-    },
-    Specialization: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    Department: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    DoctorPhone: {
+    AdminPhone: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         is: ['^0'] // Bắt đầu bằng số 0
       }
     },
-    DoctorEmail: {
+    AdminEmail: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
         isEmail: true // Kiểm tra định dạng email
       }
+    },
+    AdminAddr: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     AccPassword: {
       type: DataTypes.STRING,
@@ -75,10 +69,9 @@ module.exports = (sequelize) => {
     }
   }, {
     sequelize,
-    modelName: 'Doctor',
-    tableName: 'Doctor',
+    modelName: 'Admin',
+    tableName: 'Admin',
     timestamps: false // Không sử dụng các cột 'createdAt' và 'updatedAt'
   });
-
-  return Doctor;
+    return Admin;
 };
