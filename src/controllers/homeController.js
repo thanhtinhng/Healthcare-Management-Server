@@ -18,7 +18,7 @@ let getCRUD = (req, res) => {
     return res.render('crud.ejs');
 }
 
-let postCRUD = async (req, res) => {
+let postPatientCRUD = async (req, res) => {
     let message = await CRUDService.createNewUser(req.body)
     console.log(message)
     res.redirect('http://localhost:3000/login');
@@ -28,5 +28,5 @@ let postCRUD = async (req, res) => {
 module.exports = {
     getHomePage: getHomePage,
     getCRUD: getCRUD,
-    postCRUD: postCRUD
+    postPatientCRUD: postPatientCRUD
 }

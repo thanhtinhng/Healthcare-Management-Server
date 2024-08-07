@@ -55,37 +55,34 @@
             <div class="card-body p-5">
               <h4 class="text-uppercase text-center mb-5">Đăng ký tài khoản bệnh nhân</h4>
 
-              <form action="/post-crud" method="post" id="registerForm">
+              <form action="/post-patient-crud" method="post" id="registerForm">
 
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div data-mdb-input-init class="form-outline">
-                      <input type="text" id="last-name" name="last_name" class="form-control form-control-lg" required/>
                       <label class="form-label" for="last-name">Họ<span class="required"> *</span></label>
+                      <input type="text" id="last-name" name="last_name" class="form-control form-control-lg" required/>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <div data-mdb-input-init class="form-outline">
-                      <input type="text" id="first-name" name="first_name" class="form-control form-control-lg" required/>
                       <label class="form-label" for="first-name">Tên<span class="required"> *</span></label>
+                      <input type="text" id="first-name" name="first_name" class="form-control form-control-lg" required/>
                     </div>
                   </div>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="email" id="email" name="email" class="form-control form-control-lg" required/>
                   <label class="form-label" for="email">Email<span class="required"> *</span></label>
+                  <input type="email" id="email" name="email" class="form-control form-control-lg" required/>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
                   <label class="form-label" for="password">Mật khẩu<span class="required"> *</span></label>
+                  <input type="password" id="password" name="password" class="form-control form-control-lg" required/>
                 </div>
 
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="password" id="confirmPassword" name="confirmPassword" class="form-control form-control-lg" required/>
-                  <label class="form-label" for="confirmPassword">Nhập lại Mật khẩu<span class="required"> *</span></label>
-                </div>
+          
 
                 <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
                   <h6 class="mb-0 me-4">Giới tính: <span class="required"> *</span></h6>
@@ -98,41 +95,41 @@
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="date" id="birthdate" name="birthdate" class="form-control form-control-lg" required/>
                   <label class="form-label" for="birthdate">Ngày sinh<span class="required"> *</span></label> 
+                  <input type="date" id="birthdate" name="birthdate" class="form-control form-control-lg" required/>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="text" id="addr" name="addr" class="form-control form-control-lg" />
                   <label class="form-label" for="addr">Địa chỉ<span class="required"> *</span></label> 
+                  <input type="text" id="addr" name="addr" class="form-control form-control-lg" />
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="text" id="CCCD" name="CCCD" class="form-control form-control-lg" required/>
                   <label class="form-label" for="CCCD">Căn cước công dân<span class="required"> *</span></label>
+                  <input type="text" id="CCCD" name="CCCD" class="form-control form-control-lg" required/>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="text" id="phone" name="phone" class="form-control form-control-lg" required/>
                   <label class="form-label" for="phone">Số điện thoại<span class="required"> *</span></label>
+                  <input type="text" id="phone" name="phone" class="form-control form-control-lg" required/>
                 </div>
 
                 <div data-mdb-input-init class="form-outline mb-4">
-                  <input type="text" id="emergency" name="emergency" class="form-control form-control-lg" />
                   <label class="form-label" for="emergency">Số liên hệ khẩn cấp</label>
+                  <input type="text" id="emergency" name="emergency" class="form-control form-control-lg" />
                 </div>
                 
 
                 <div class="form-check justify-content-center mb-5" style="display: flex !important; flex-wrap: nowrap; flex-direction: column; padding-top: 20px;">
                   <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
                   <label class="form-check-label" for="form2Example3g">
-                    Đồng ý với <a href="#!" class="text-body"><u>điều khoảng ứng dụng</u></a>
+                    Đồng ý với <a href="#!" class="text-body"><u>điều khoản ứng dụng</u></a>
                   </label>
                 </div>
 
                 <div class="d-flex justify-content-center">
                   <button  type="submit" data-mdb-button-init
-                    data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Tạo tài khoảng</button>
+                    data-mdb-ripple-init class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Tạo tài khoản</button>
                 </div>
 
                 <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản? <a href="http://localhost:3000/login"
