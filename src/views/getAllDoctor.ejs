@@ -10,8 +10,6 @@
         }
         
         #myInput {
-            background-position: 10px 10px;
-            background-repeat: no-repeat;
             width: 40%;
             font-size: 16px;
             padding: 12px 20px 12px 20px;
@@ -59,6 +57,7 @@
                 <th>Số điện thoại</th>
                 <th>Chuyên khoa</th>
                 <th>Chuyên môn</th>
+                <th></th>
             </tr>
             <% for (let i=0; i < dataTable.length; i++) { %>
                 <tr>
@@ -69,8 +68,98 @@
                     <td><%= dataTable[i].DoctorBirthdate %></td>
                     <td><%= dataTable[i].DateJoined %></td>
                     <td><%= dataTable[i].DoctorPhone %></td>
-                    <td><%= dataTable[i].Department %></td>
+                    <%  var department = dataTable[i].Department;
+                        var meaning = "";
+                        switch (department) {
+                            case "CNK":
+                                meaning = "Chống nhiễm khuẩn";
+                                break;
+                            case "CXK":
+                                meaning = "Cơ – xương – khớp";
+                                break;
+                            case "D":
+                                meaning = "Dược";
+                                break;
+                            case "DD":
+                                meaning = "Dinh dưỡng";
+                                break;
+                            case "DL":
+                                meaning = "Da Liễu";
+                                break;
+                            case "DU":
+                                meaning = "Dị ứng";
+                                break;
+                            case "HS":
+                                meaning = "Hóa Sinh";
+                                break;
+                            case "HSCC":
+                                meaning = "Hồi sức cấp cứu";
+                                break;
+                            case "KB":
+                                meaning = "Khám bệnh";
+                                break;
+                            case "M":
+                                meaning = "Mắt";
+                                break;
+                            case "N":
+                                meaning = "Nhi";
+                                break;
+                            case "NLN":
+                                meaning = "Ngoại lồng ngực";
+                                break;
+                            case "NS":
+                                meaning = "Nội soi";
+                                break;
+                            case "NTH":
+                                meaning = "Nội tổng hợp";
+                                break;
+                            case "PS":
+                                meaning = "Phụ sản";
+                                break;
+                            case "PTGMHS":
+                                meaning = "Gây mê hồi sức";
+                                break;
+                            case "RHM":
+                                meaning = "Nha khoa";
+                                break;
+                            case "T":
+                                meaning = "Lọc máu";
+                                break;
+                            case "TH":
+                                meaning = "Nội tiêu hóa";
+                                break;
+                            case "TM":
+                                meaning = "Nội tim mạch";
+                                break;
+                            case "NTK":
+                                meaning = "Thần kinh";
+                                break;
+                            case "TMH":
+                                meaning = "Tai – mũi – họng";
+                                break;
+                            case "TN":
+                                meaning = "Truyền nhiễm";
+                                break;
+                            case "TTN":
+                                meaning = "Thận – tiết niệu";
+                                break;
+                            case "YHCT":
+                                meaning = "Y học cổ truyền";
+                                break;
+                            case "YHHN":
+                                meaning = "Y học hạt nhân";
+                                break;
+                            default:
+                                meaning = "Không xác định";
+                                break;
+                        }
+                    %>
+                    <td><%= meaning %></td>
                     <td><%= dataTable[i].Specialization %></td>
+                    <td>
+                        <button type="button" >Edit</button>
+                        <button type="button">Delete</button>
+                    </td>
                 </tr>
             <% } %>
         </table>
