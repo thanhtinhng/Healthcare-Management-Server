@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        
+        #myInput {
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            width: 40%;
+            font-size: 16px;
+            padding: 12px 20px 12px 20px;
+            border: 2px solid #000000;
+            margin-bottom: 12px;
+        }
+        
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+        
+        #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #doctor-list {
+            padding: 0 10px
+        }
+
+    </style>
+</head>
+<body>
+    <div id="doctor-list">
+        <h2>Danh sách bác sĩ</h2>
+    
+        <input type="text" id="myInput" onkeyup="filterDoctor()" placeholder="Tìm ID hoặc Tên bác sĩ..." title="Type in a name">
+    
+        <table id="myTable">
+            <tr class="header">
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Giới tính</th>
+                <th>Ngày sinh</th>
+                <th>Ngày vào làm</th>
+                <th>Số điện thoại</th>
+                <th>Chuyên khoa</th>
+                <th>Chuyên môn</th>
+            </tr>
+            <% for (let i=0; i < dataTable.length; i++) { %>
+                <tr>
+                    <td><%= dataTable[i].DoctorID %></td>
+                    <td><%= dataTable[i].DoctorName %></td>
+                    <td><%= dataTable[i].DoctorEmail %></td>
+                    <td><%= dataTable[i].Gender %></td>
+                    <td><%= dataTable[i].DoctorBirthdate %></td>
+                    <td><%= dataTable[i].DateJoined %></td>
+                    <td><%= dataTable[i].DoctorPhone %></td>
+                    <td><%= dataTable[i].Department %></td>
+                    <td><%= dataTable[i].Specialization %></td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+
+    <script>
+        function filterDoctor() {
+            var input, filter, table, tr, i, idValue, nameValue, id, name;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) {
+                id = tr[i].getElementsByTagName("td")[0];
+                name = tr[i].getElementsByTagName("td")[1];
+                if (id || name) {
+                    idValue = id.textContent || id.innerText;
+                    nameValue = name.textContent || name.innerText;
+                    if (idValue.toUpperCase().indexOf(filter) > -1 || nameValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        }
+                        else {
+                            tr[i].style.display = "none";
+                    }
+                }       
+            }
+        }
+    </script>
+</body>
+</html>
