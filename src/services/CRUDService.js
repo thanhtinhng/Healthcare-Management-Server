@@ -58,10 +58,24 @@ let createNewDoctor = async (data) => {
             reject(error)
         }
     })
+}
 
+let getAllDoctor = async () => {
+    return new Promise (async(resolve, reject) => {
+        try {
+            let data = await db.Doctor.findAll({
+                attributes: {exclude: ['AccPassword']},
+                raw: true,
+            })
+            resolve(data)
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
 module.exports = {
     createNewUser: createNewUser,
-    createNewDoctor: createNewDoctor
+    createNewDoctor: createNewDoctor,
+    getAllDoctor: getAllDoctor
 }
