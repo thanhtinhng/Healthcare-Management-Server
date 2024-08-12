@@ -107,15 +107,29 @@ let updateDoctorData = async (data) => {
                 doctor.Department = data.department
                 doctor.Specialization = data.specialization
                 await doctor.save()
-                let allDoctor = db.Doctor.findAll({
-                    attributes: {exclude: ['AccPassword']},
-                    raw: true,
-                });
-                resolve(allDoctor)
+                
+                resolve()
             }
             else {
                 resolve()
             }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
+let deleteDoctorById = async (id) => {
+    return new Promise (async(resolve, reject) => {
+        try {
+            let doctor = await db.Doctor.findOne({
+                where: {DoctorID: id}
+            })
+            if(doctor) {
+                await doctor.destroy()
+                resolve()
+            }
+            else{resolve()}
         } catch (error) {
             reject(error)
         }
@@ -127,5 +141,6 @@ module.exports = {
     createNewDoctor: createNewDoctor,
     getAllDoctor: getAllDoctor,
     getUserInfoById: getUserInfoById,
-    updateDoctorData: updateDoctorData
+    updateDoctorData: updateDoctorData,
+    deleteDoctorById: deleteDoctorById
 }

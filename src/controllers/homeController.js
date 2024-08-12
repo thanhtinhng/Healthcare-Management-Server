@@ -60,11 +60,16 @@ let getEditCRUD = async (req, res) => {
 
 let putCRUD = async (req, res) => {
     let data = req.body
-    let allDoctor = await CRUDService.updateDoctorData(data)
-    return res.render("getAllDoctor.ejs", {
-        dataTable: allDoctor
-    }
-    )
+    await CRUDService.updateDoctorData(data)
+    res.redirect('/get-doctor')
+    return res.send("update done")
+}
+
+let deleteCRUD = async (req, res) => {
+    let id = req.query.id
+    await CRUDService.deleteDoctorById(id)
+    res.redirect('/get-doctor')
+    return res.send("delete done")
 }
 
 module.exports = {
@@ -75,5 +80,6 @@ module.exports = {
     getNewDoctorForm: getNewDoctorForm,
     getDoctorCRUD: getDoctorCRUD,
     getEditCRUD: getEditCRUD,
-    putCRUD: putCRUD
+    putCRUD: putCRUD,
+    deleteCRUD: deleteCRUD
 }
