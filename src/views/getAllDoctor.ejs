@@ -38,6 +38,37 @@
             padding: 0 10px
         }
 
+        .btn-edit {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgb(244, 159, 0);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-edit:hover {
+            background-color: orange;
+        }
+
+        .btn-delete {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-delete:hover {
+            background-color: red;
+        }
     </style>
 </head>
 <body>
@@ -157,8 +188,8 @@
                     <td><%= meaning %></td>
                     <td><%= dataTable[i].Specialization %></td>
                     <td>
-                        <button type="button" >Edit</button>
-                        <button type="button">Delete</button>
+                        <a href="/edit-crud?id=<%=dataTable[i].DoctorID %>" class="btn-edit" type="button" >Edit</a>
+                        <a href="" class="btn-delete" type="button">Delete</a>
                     </td>
                 </tr>
             <% } %>

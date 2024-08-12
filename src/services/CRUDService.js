@@ -74,8 +74,58 @@ let getAllDoctor = async () => {
     })
 }
 
+let getUserInfoById = async (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let doctor = await db.Doctor.findOne({
+                where: {DoctorID: id}, raw: true, attributes: {exclude: ['AccPassword']}
+            })
+            if (doctor) {
+                resolve(doctor)
+            }
+            else {
+                resolve([])
+            }
+        } catch (error) {
+            reject (error)
+        }
+    })
+}
+
+let updateDoctorData = async (data) => {
+    return new Promise (async(resolve, reject) => {
+        try {
+            let doctor = await db.Doctor.findOne({
+                where: {DoctorID: data.id}
+            })
+            if (doctor) {
+                doctor.DoctorName = data.name
+                doctor.Gender = data.gender
+                doctor.DoctorBirthdate = data.birthdate
+                doctor.DateJoined = data.datejoin
+                doctor.DoctorPhone = data.phone
+                doctor.Department = data.department
+                doctor.Specialization = data.specialization
+                await doctor.save()
+                let allDoctor = db.Doctor.findAll({
+                    attributes: {exclude: ['AccPassword']},
+                    raw: true,
+                });
+                resolve(allDoctor)
+            }
+            else {
+                resolve()
+            }
+        } catch (error) {
+            reject(error)
+        }
+    })
+}
+
 module.exports = {
     createNewUser: createNewUser,
     createNewDoctor: createNewDoctor,
-    getAllDoctor: getAllDoctor
+    getAllDoctor: getAllDoctor,
+    getUserInfoById: getUserInfoById,
+    updateDoctorData: updateDoctorData
 }

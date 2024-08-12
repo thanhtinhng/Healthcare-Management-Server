@@ -44,11 +44,36 @@ let getDoctorCRUD = async (req, res) => {
     })
 }
 
+let getEditCRUD = async (req, res) => {
+    let doctorId = req.query.id
+    if (doctorId) {
+        let doctorData = await CRUDService.getUserInfoById(doctorId)
+        console.log(doctorData)
+        return res.render("editCRUD.ejs", {
+            doctorData: doctorData
+        })
+    }
+    else {
+        return res.send("doctor not found")
+    }
+}
+
+let putCRUD = async (req, res) => {
+    let data = req.body
+    let allDoctor = await CRUDService.updateDoctorData(data)
+    return res.render("getAllDoctor.ejs", {
+        dataTable: allDoctor
+    }
+    )
+}
+
 module.exports = {
     getHomePage: getHomePage,
     getNewPatientForm: getNewPatientForm,
     postPatientCRUD: postPatientCRUD,
     postDoctorCRUD: postDoctorCRUD,
     getNewDoctorForm: getNewDoctorForm,
-    getDoctorCRUD: getDoctorCRUD
+    getDoctorCRUD: getDoctorCRUD,
+    getEditCRUD: getEditCRUD,
+    putCRUD: putCRUD
 }
