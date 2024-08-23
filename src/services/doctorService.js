@@ -52,7 +52,7 @@ let getDoctorById = (doctorId) => {
     })
 }
 
-let handleUserAppoint = async (date, time, userId, doctorId) => {
+let handleUserAppoint = async (date, time, userId, doctorId, symptom) => {
     return new Promise(async(resolve, reject) => {
         try {
             let appointmentData = {}
@@ -62,7 +62,8 @@ let handleUserAppoint = async (date, time, userId, doctorId) => {
                 await db.Appointment.create({
                     DoctorID: doctorId,
                     PatientID: userId,
-                    ConsultationTime: dateTime
+                    ConsultationTime: dateTime,
+                    Symptom: symptom,
                 })
                 appointmentData.errCode = 0
                 appointmentData.errMessage = 'OK'

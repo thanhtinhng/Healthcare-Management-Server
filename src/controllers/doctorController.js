@@ -33,6 +33,7 @@ let handleAppoint = async (req, res) => {
     let time = req.body.time
     let userId = req.body.userId
     let doctorId = req.body.doctorId
+    let symptom = req.body.symptom
 
     if (!date || !time) {
         return res.status(500).json({
@@ -41,7 +42,7 @@ let handleAppoint = async (req, res) => {
         })
     }
 
-    let appointmentData = await doctorService.handleUserAppoint(date, time, userId, doctorId)
+    let appointmentData = await doctorService.handleUserAppoint(date, time, userId, doctorId, symptom)
 
     return res.status(200).json({
         errCode: appointmentData.errCode,
