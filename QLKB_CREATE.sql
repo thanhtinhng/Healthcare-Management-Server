@@ -72,12 +72,14 @@ CREATE TABLE Doctor (
 ALTER TABLE Doctor ADD CONSTRAINT CHECK_DR_JOINED CHECK(DoctorBirthdate < DateJoined);
 
 CREATE TABLE Appointment (
-    AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
+    AppointmentID INT AUTO_INCREMENT PRIMARY KEY AUTO_INCREMENT,
     ConsultationTime DATETIME NOT NULL,
-    Symptom VARCHAR(255) NOT NULL,
+    Symptom VARCHAR(255) NULL,
 	PatientID INT NOT NULL,
+    ReceptionistID INT,
     DoctorID INT NOT NULL,
     FOREIGN KEY (PatientID) REFERENCES Patient (PatientID),
+    FOREIGN KEY (ReceptionistID) REFERENCES Receptionist (ReceptionistID),
     FOREIGN KEY (DoctorID) REFERENCES Doctor (DoctorID)
 );
 
