@@ -69,6 +69,22 @@
         .btn-delete:hover {
             background-color: red;
         }
+
+        .btn-add-doctor {
+            display: inline-block;
+            padding: 10px 10px;
+            background-color: rgb(67, 184, 0);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-add-doctor:hover {
+            background-color: rgb(83, 226, 0);
+        }
     </style>
 </head>
 <body>
@@ -76,7 +92,7 @@
         <h2>Danh sách bác sĩ</h2>
     
         <input type="text" id="myInput" onkeyup="filterDoctor()" placeholder="Tìm ID hoặc Tên bác sĩ..." title="Type in a name">
-    
+        <a href="/new-doctor-form" class="btn-add-doctor" type="button" >New</a>
         <table id="myTable">
             <tr class="header">
                 <th>ID</th>
