@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        
+        #myInput {
+            width: 40%;
+            font-size: 16px;
+            padding: 12px 20px 12px 20px;
+            border: 2px solid #000000;
+            margin-bottom: 12px;
+        }
+        
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+            font-size: 18px;
+        }
+        
+        #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #appointment-list {
+            padding: 0 10px
+        }
+    </style>
+</head>
+<body>
+    <div id="appointment-list">
+        <h2>Danh sách cuộc hẹn</h2>
+    
+        <table id="myTable">
+            <tr class="header">
+                <th>ID</th>
+                <th>Thời gian</th>
+                <th>Triệu chứng</th>
+                <th>Mã bác sĩ</th>
+                <th>Mã người dùng</th>
+            </tr>
+            <% for (let i=0; i < appointmentData.length; i++) { %>
+                <tr>
+                    <td><%= appointmentData[i].AppointmentID %></td>
+                    <td><%= appointmentData[i].ConsultationTime %></td>
+                    <td><%= appointmentData[i].Symptom %></td>
+                    <td><%= appointmentData[i].DoctorID %></td>
+                    <td><%= appointmentData[i].PatientID %></td>
+                <tr>
+            <% } %>
+        </table>
+    </div>
+</body>
+</html>

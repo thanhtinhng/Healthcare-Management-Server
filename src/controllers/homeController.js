@@ -32,7 +32,7 @@ let getNewDoctorForm = (req, res) => {
 let postDoctorCRUD = async (req, res) => {
     let message = await CRUDService.createNewDoctor(req.body)
     console.log(message)
-    res.redirect('http://localhost:8080/new-doctor-form')
+    res.redirect('http://localhost:8080/get-doctor')
     return res.send('post crud')
 }
 
@@ -72,6 +72,14 @@ let deleteCRUD = async (req, res) => {
     return res.send("delete done")
 }
 
+let getAppointment = async (req, res) => {
+    let data = await CRUDService.getAllAppointment()
+    console.log(data)
+    return res.render("getappointment.ejs", {
+        appointmentData: data
+    })
+}
+
 module.exports = {
     getHomePage: getHomePage,
     getNewPatientForm: getNewPatientForm,
@@ -81,5 +89,6 @@ module.exports = {
     getDoctorCRUD: getDoctorCRUD,
     getEditCRUD: getEditCRUD,
     putCRUD: putCRUD,
-    deleteCRUD: deleteCRUD
+    deleteCRUD: deleteCRUD,
+    getAppointment: getAppointment
 }

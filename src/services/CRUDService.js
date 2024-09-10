@@ -74,6 +74,20 @@ let getAllDoctor = async () => {
     })
 }
 
+let getAllAppointment = async () => {
+    return new Promise (async(resolve, reject) => {
+        try {
+            let data = await db.Appointment.findAll({
+                raw: true
+            })
+            resolve(data)
+        }
+        catch (error) {
+            reject(error)
+        }
+    })
+}
+
 let getUserInfoById = async (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -142,5 +156,6 @@ module.exports = {
     getAllDoctor: getAllDoctor,
     getUserInfoById: getUserInfoById,
     updateDoctorData: updateDoctorData,
-    deleteDoctorById: deleteDoctorById
+    deleteDoctorById: deleteDoctorById,
+    getAllAppointment: getAllAppointment
 }
