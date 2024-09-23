@@ -80,6 +80,20 @@ let getAllAppointment = async () => {
             let data = await db.Appointment.findAll({
                 raw: true
             })
+            data = data.map(appointment => {
+                let consultationTime = new Date(appointment.ConsultationTime)
+                consultationTime.setHours(consultationTime.getHours() - 7) // Trừ đi 7 giờ
+                const year = consultationTime.getFullYear()
+                const month = String(consultationTime.getMonth() + 1).padStart(2, '0') // Tháng bắt đầu từ 0
+                const day = String(consultationTime.getDate()).padStart(2, '0')
+                const hours = String(consultationTime.getHours()).padStart(2, '0')
+                const minutes = String(consultationTime.getMinutes()).padStart(2, '0')
+                const seconds = String(consultationTime.getSeconds()).padStart(2, '0')
+
+                // Gán lại giá trị với định dạng 'YYYY-MM-DD HH:mm:ss'
+                appointment.ConsultationTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+                return appointment;
+            });
             resolve(data)
         }
         catch (error) {
